@@ -33,7 +33,7 @@ class Munneco:
         '''
         # Hay que mejorarlo para que con cada fallo cambie de imagen.
         # Puede ser con un format, donde se pase al siguiente número de imagen.
-        nombre_imagen = 'imagenes/ahorcado_{}.png'.format(1)
+        nombre_imagen = 'imagenes/ahorcado_{}.png'.format(cont_fallos)
         self.image = pygame.image.load(nombre_imagen)
         self.image = pygame.transform.scale(
             self.image, (self.munneco_x, self.munneco_y)

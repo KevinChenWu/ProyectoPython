@@ -19,12 +19,12 @@ class Ajustes:
 
         # Configuración de la pantalla
         self.pantalla_ancho = 1200
-        self.pantalla_altura = 800
+        self.pantalla_altura = 570
         self.bg_color = self.fondo  # Color del fondo.
 
         # Configuración de las letras.
-        self.font_abecedario = pygame.font.Font(None, 60)
-        self.font_palabra = pygame.font.Font(None, 60)
+        self.font_abecedario = pygame.font.Font(None, 50)
+        self.font_palabra = pygame.font.Font(None, 50)
 
         # Abecedario.
         self.abecedario_completo = [
@@ -34,5 +34,5 @@ class Ajustes:
         ]
 
         # Configuración de la imagen del muñeco.
-        self.munneco_tamanno_x = 300
-        self.munneco_tamanno_y = 400
+        self.munneco_tamanno_x = 287
+        self.munneco_tamanno_y = 300

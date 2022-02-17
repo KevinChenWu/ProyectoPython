@@ -6,6 +6,8 @@ import pygame
 
 import re
 
+import random
+
 from ajustes import Ajustes
 
 from letra import Letra
@@ -30,7 +32,9 @@ class Ahorcado:
         self.ajustes = Ajustes()
 
         # Palabra por adivinar (hacer lógica para incluir más palabras).
-        self.palabra = 'AHORCADO'
+        self.lista_palabras = []
+        self._cargar_palabras()
+        self.palabra = self._asignar_palabra()
 
         # Se crea la pantalla del juego.
         self.pantalla = pygame.display.set_mode(
@@ -50,6 +54,34 @@ class Ahorcado:
         self._crear_palabra()
         self._crear_abecedario()
         self.munneco = Munneco(self)  # Creación del muñeco inicial.
+
+    def _cargar_palabras(self):
+        palabras_largas = open('palabras-largas.txt', 'r')
+        largas = palabras_largas.read().split('\n')
+        largas = largas[:-1]
+        largas = [i.upper() for i in largas]
+        palabras_largas.close()
+
+        palabras_medianas = open('palabras-medianas.txt', 'r')
+        medianas = palabras_medianas.read().split('\n')
+        medianas = medianas[:-1]
+        medianas = [i.upper() for i in medianas]
+        palabras_medianas.close()
+
+        palabras_cortas = open('palabras-cortas.txt', 'r')
+        cortas = palabras_cortas.read().split('\n')
+        cortas = cortas[:-1]
+        cortas = [i.upper() for i in cortas]
+        palabras_cortas.close()
+
+        biblioteca_palabras = [cortas, medianas, largas]
+        for nivel in biblioteca_palabras:
+            for i in range(5):
+                self.lista_palabras.append(random.choice(nivel))
+
+    def _asignar_palabra(self):
+        palabra = random.choice(self.lista_palabras)
+        return palabra
 
     def _crear_palabra(self):
         '''
