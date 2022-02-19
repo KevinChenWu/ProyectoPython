@@ -244,7 +244,7 @@ class Ahorcado:
             # Hay que actualizarlo para que se regrese a un menu inicial
             # y muestre el scoreboard.
             print('Juego terminado.')
-            sys.exit()
+            # sys.exit()
 
     def _actualizar_pantalla(self):
         '''
