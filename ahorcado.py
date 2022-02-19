@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+ #!/usr/bin/python3
 
 import sys
 
@@ -15,6 +15,8 @@ from letra import Letra
 from abecedario import Abecedario
 
 from munneco import Munneco
+
+from estadisticas import Stats
 
 
 class Ahorcado:
@@ -47,6 +49,7 @@ class Ahorcado:
         self.eventos_repetidos = []
         self.letras_utilizadas = []
         self.letras_abecedario = []
+        self.pos_letras = []
 
         # Contador de fallos
         self.contador_fallos = 0
@@ -54,33 +57,35 @@ class Ahorcado:
         self._crear_palabra()
         self._crear_abecedario()
         self.munneco = Munneco(self)  # Creación del muñeco inicial.
+        self.stats = Stats(self)
 
     def _cargar_palabras(self):
         palabras_largas = open('palabras-largas.txt', 'r')
         largas = palabras_largas.read().split('\n')
         largas = largas[:-1]
-        largas = [i.upper() for i in largas]
+        self.largas = [i.upper() for i in largas]
         palabras_largas.close()
 
         palabras_medianas = open('palabras-medianas.txt', 'r')
         medianas = palabras_medianas.read().split('\n')
         medianas = medianas[:-1]
-        medianas = [i.upper() for i in medianas]
+        self.medianas = [i.upper() for i in medianas]
         palabras_medianas.close()
 
         palabras_cortas = open('palabras-cortas.txt', 'r')
         cortas = palabras_cortas.read().split('\n')
         cortas = cortas[:-1]
-        cortas = [i.upper() for i in cortas]
+        self.cortas = [i.upper() for i in cortas]
         palabras_cortas.close()
 
-        biblioteca_palabras = [cortas, medianas, largas]
+        biblioteca_palabras = [self.cortas, self.medianas, self.largas]
         for nivel in biblioteca_palabras:
             for i in range(5):
                 self.lista_palabras.append(random.choice(nivel))
 
     def _asignar_palabra(self):
         palabra = random.choice(self.lista_palabras)
+        print(palabra)
         return palabra
 
     def _crear_palabra(self):
@@ -132,7 +137,8 @@ class Ahorcado:
         '''
         while True:
             self._verificar_eventos()
-            self._actualizar_pantalla()
+            if self.stats.juego_activo:
+                self._actualizar_pantalla()
 
     def _verificar_eventos(self):
         '''
@@ -141,7 +147,7 @@ class Ahorcado:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN and self.stats.juego_activo:
                 self._revisar_evento_tecla(event)
 
     def _revisar_evento_tecla(self, event):
@@ -222,12 +228,18 @@ class Ahorcado:
         renglón por la letra y modifica la letra del abecedario en verde.
         Verde == acierto.
         '''
+        # Cambio de reglón por letra.
         coincidencias = re.finditer(letra, self.palabra)
         posicion = [coincidencia.start() for coincidencia in coincidencias]
         for i in posicion:
             self.letras[i].actualizar(letra)
+            self.pos_letras.append(i)
+        # Cambio de color a verde.
         letra_abecedario = self.ajustes.abecedario_completo.index(letra)
         self.letras_abecedario[letra_abecedario].acierto(letra)
+        # Palabra acertada
+        if len(self.letras) == len(self.pos_letras):
+            self._palabra_acertada()
 
     def _letra_fallida(self, letra):
         '''
@@ -239,12 +251,22 @@ class Ahorcado:
         letra_abecedario = self.ajustes.abecedario_completo.index(letra)
         self.letras_abecedario[letra_abecedario].fallo(letra)
         self.munneco.actualizar_munneco(self.contador_fallos)
-        if self.contador_fallos == 10:
+        if self.contador_fallos >= 10:
             # Por el momento se cierra el juego si se llega 10 fallos.
             # Hay que actualizarlo para que se regrese a un menu inicial
             # y muestre el scoreboard.
             print('Juego terminado.')
+            self.stats.juego_activo = False
             # sys.exit()
+
+    def _palabra_acertada(self):
+        print('Palabra acertada')
+        if self.palabra in self.cortas:
+            self.stats._aumentar_puntuacion('cortas')
+        elif self.palabra in self.medianas:
+            self.stats._aumentar_puntuacion('medianas')
+        elif self.palabra in self.largas:
+            self.stats._aumentar_puntuacion('largas')
 
     def _actualizar_pantalla(self):
         '''
