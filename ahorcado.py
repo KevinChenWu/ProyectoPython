@@ -1,4 +1,4 @@
- #!/usr/bin/python3
+#!/usr/bin/python3
 
 import sys
 
@@ -49,14 +49,17 @@ class Ahorcado:
 
         self.stats = Stats(self)
 
+        self.puntero_palabra = 0
+
+        self.lista_palabras = []
+        self._cargar_palabras()
+
     def _init_juego(self):
         '''
         Se inicia el juego cuando se le da al botón jugar y se pasa de
         palabra al acertar la anterior.
         '''
-        # Palabra por adivinar (hacer lógica para incluir más palabras).
-        self.lista_palabras = []
-        self._cargar_palabras()
+        # Palabra por adivinar.
         self.palabra = self._asignar_palabra()
 
         # Listas.
@@ -104,7 +107,8 @@ class Ahorcado:
         '''
         Se escoge una de las palabras de manera aleatoria.
         '''
-        palabra = random.choice(self.lista_palabras)
+        print(self.lista_palabras)
+        palabra = self.lista_palabras[self.puntero_palabra]
         print(palabra)
         return palabra
 
@@ -114,9 +118,9 @@ class Ahorcado:
         '''
         numero_letras = len(self.palabra)
         for numero_letra in range(numero_letras):
-            letra = Letra(self, '_')
+            letra = Letra(self, '_ ')
             letra_ancho = letra.rect.width
-            letra.x = letra_ancho + letra_ancho * numero_letra * 2
+            letra.x = letra_ancho + letra_ancho * numero_letra
             letra.rect.x = letra.x
             self.letras.append(letra)
 
@@ -300,7 +304,6 @@ class Ahorcado:
         letra_abecedario = self.ajustes.abecedario_completo.index(letra)
         self.letras_abecedario[letra_abecedario].fallo(letra)
         self.munneco.actualizar_munneco(self.contador_fallos)
-        print(self.contador_fallos)
         if self.contador_fallos >= 10:
             # Por el momento se cierra el juego si se llega 10 fallos.
             # Hay que actualizarlo para que se regrese a un menu inicial
@@ -315,7 +318,11 @@ class Ahorcado:
             self.stats._aumentar_puntuacion('medianas')
         elif self.palabra in self.largas:
             self.stats._aumentar_puntuacion('largas')
-        self._init_juego()
+        if self.puntero_palabra < 15:
+            self.puntero_palabra += 1
+            self._init_juego()
+        else:
+            print('Se acabó el juego')
 
     def _palabra_fallida(self):
         print('Palabra fallida')
@@ -340,6 +347,9 @@ class Ahorcado:
         if self.juego_activo is True and self.score is False:
             # Impresión de muñeco.
             self.munneco.blitme()
+
+            # Impresión de los puntos.
+            self.stats.blit_puntos()
 
             # Impresión de palabra a adivinar.
             for letra in self.letras:

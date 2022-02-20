@@ -16,6 +16,14 @@ class Stats:
 
         # Puntos actuales.
         self.puntos = 0
+        PUNTOS = 'Puntos: {}'.format(self.puntos)
+        self.puntaje = self.font.render(
+            PUNTOS, True, self.negro, self.fondo
+        )
+        self.puntaje_rect = self.puntaje.get_rect()
+        self.puntaje_rect.topleft = self.pantalla_rect.topleft
+        self.puntaje_rect.x += self.puntaje_rect.height
+        self.puntaje_rect.y += self.puntaje_rect.height
 
     def _aumentar_puntuacion(self, tamanno):
         '''
@@ -23,13 +31,14 @@ class Stats:
         '''
         if tamanno == 'cortas':
             print('Dificultad: fácil')
-            self.puntos += 1
+            self.puntos += 25
         elif tamanno == 'medianas':
             print('Dificultad: media')
-            self.puntos += 2
+            self.puntos += 50
         elif tamanno == 'largas':
             print('Dificultad: difícil')
-            self.puntos += 3
+            self.puntos += 100
+        self._actualizar_puntos()
 
     def _puntuacion_final(self):
         '''
@@ -68,3 +77,18 @@ class Stats:
         self._scoreboard()
         self.pantalla.blit(self.volver_menu, self.volver_menu_rect)
         self.pantalla.blit(self.volver_juego, self.volver_juego_rect)
+
+    def _actualizar_puntos(self):
+        '''
+        Actualizar los puntos.
+        '''
+        PUNTOS = 'Puntos: {}'.format(self.puntos)
+        self.puntaje = self.font.render(
+            PUNTOS, True, self.negro, self.fondo
+        )
+
+    def blit_puntos(self):
+        '''
+        Dibujar los puntos en pantalla.
+        '''
+        self.pantalla.blit(self.puntaje, self.puntaje_rect)
