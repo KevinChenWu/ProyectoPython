@@ -18,6 +18,8 @@ from munneco import Munneco
 
 from estadisticas import Stats
 
+from boton_jugar import BotonJugar
+
 
 class Ahorcado:
     '''
@@ -33,16 +35,29 @@ class Ahorcado:
         # Importar ajustes.
         self.ajustes = Ajustes()
 
-        # Palabra por adivinar (hacer lógica para incluir más palabras).
-        self.lista_palabras = []
-        self._cargar_palabras()
-        self.palabra = self._asignar_palabra()
-
         # Se crea la pantalla del juego.
         self.pantalla = pygame.display.set_mode(
             (self.ajustes.pantalla_ancho, self.ajustes.pantalla_altura)
         )
         pygame.display.set_caption('Ahorcado')
+
+        self.boton_jugar = BotonJugar(self)
+
+        self.juego_activo = False
+
+        self.score = False
+
+        self.stats = Stats(self)
+
+    def _init_juego(self):
+        '''
+        Se inicia el juego cuando se le da al botón jugar y se pasa de
+        palabra al acertar la anterior.
+        '''
+        # Palabra por adivinar (hacer lógica para incluir más palabras).
+        self.lista_palabras = []
+        self._cargar_palabras()
+        self.palabra = self._asignar_palabra()
 
         # Listas.
         self.letras = []
@@ -57,9 +72,11 @@ class Ahorcado:
         self._crear_palabra()
         self._crear_abecedario()
         self.munneco = Munneco(self)  # Creación del muñeco inicial.
-        self.stats = Stats(self)
 
     def _cargar_palabras(self):
+        '''
+        Se cargan listas de palabras que se pueden utilizar en el juego.
+        '''
         palabras_largas = open('palabras-largas.txt', 'r')
         largas = palabras_largas.read().split('\n')
         largas = largas[:-1]
@@ -84,6 +101,9 @@ class Ahorcado:
                 self.lista_palabras.append(random.choice(nivel))
 
     def _asignar_palabra(self):
+        '''
+        Se escoge una de las palabras de manera aleatoria.
+        '''
         palabra = random.choice(self.lista_palabras)
         print(palabra)
         return palabra
@@ -137,8 +157,7 @@ class Ahorcado:
         '''
         while True:
             self._verificar_eventos()
-            if self.stats.juego_activo:
-                self._actualizar_pantalla()
+            self._actualizar_pantalla()
 
     def _verificar_eventos(self):
         '''
@@ -147,8 +166,38 @@ class Ahorcado:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.KEYDOWN and self.stats.juego_activo:
+            elif (
+                event.type == pygame.MOUSEBUTTONDOWN and
+                self.juego_activo is False and
+                self.score is False
+            ):
+                mouse_pos = pygame.mouse.get_pos()
+                self._revisar_boton_jugar(mouse_pos)
+            elif (
+                event.type == pygame.KEYDOWN and
+                self.juego_activo and
+                self.score is False
+            ):
                 self._revisar_evento_tecla(event)
+            elif (
+                event.type == pygame.KEYDOWN and
+                self.juego_activo is False and
+                self.score
+            ):
+                self._revisar_score(event)
+
+    def _revisar_boton_jugar(self, mouse_pos):
+        if self.boton_jugar.rect.collidepoint(mouse_pos):
+            self.juego_activo = True
+            self._init_juego()
+
+    def _revisar_score(self, event):
+        if event.key == pygame.K_ESCAPE:
+            self.score = False
+        elif event.key == pygame.K_SPACE:
+            self.score = False
+            self.juego_activo = True
+            self._init_juego()
 
     def _revisar_evento_tecla(self, event):
         '''
@@ -251,13 +300,12 @@ class Ahorcado:
         letra_abecedario = self.ajustes.abecedario_completo.index(letra)
         self.letras_abecedario[letra_abecedario].fallo(letra)
         self.munneco.actualizar_munneco(self.contador_fallos)
+        print(self.contador_fallos)
         if self.contador_fallos >= 10:
             # Por el momento se cierra el juego si se llega 10 fallos.
             # Hay que actualizarlo para que se regrese a un menu inicial
             # y muestre el scoreboard.
-            print('Juego terminado.')
-            self.stats.juego_activo = False
-            # sys.exit()
+            self._palabra_fallida()
 
     def _palabra_acertada(self):
         print('Palabra acertada')
@@ -267,24 +315,42 @@ class Ahorcado:
             self.stats._aumentar_puntuacion('medianas')
         elif self.palabra in self.largas:
             self.stats._aumentar_puntuacion('largas')
+        self._init_juego()
+
+    def _palabra_fallida(self):
+        print('Palabra fallida')
+        print('Juego terminado.')
+        self.stats._puntuacion_final()
+        self.juego_activo = False
+        self.score = True
 
     def _actualizar_pantalla(self):
         '''
         Actualización de la pantalla por cada bucle.
         '''
+
         # Colerando el fondo.
         self.pantalla.fill(self.ajustes.bg_color)
 
-        # Impresión de muñeco.
-        self.munneco.blitme()
+        # Menú
+        if self.juego_activo is False and self.score is False:
+            self.boton_jugar._dibujar_boton()
 
-        # Impresión de palabra a adivinar.
-        for letra in self.letras:
-            letra.blitme()
+        # Dentro del juego
+        if self.juego_activo is True and self.score is False:
+            # Impresión de muñeco.
+            self.munneco.blitme()
 
-        # Impresión del abecedario.
-        for letra in self.letras_abecedario:
-            letra.blitme()
+            # Impresión de palabra a adivinar.
+            for letra in self.letras:
+                letra.blitme()
+
+            # Impresión del abecedario.
+            for letra in self.letras_abecedario:
+                letra.blitme()
+
+        if self.juego_activo is False and self.score is True:
+            self.stats.blitme()
 
         # Hace visible la última pantalla dibujada.
         pygame.display.flip()
