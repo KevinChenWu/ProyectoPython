@@ -1,6 +1,3 @@
-import pygame
-
-
 class Menu:
 
     def __init__(self, ahorcado):
@@ -11,13 +8,11 @@ class Menu:
         self.ajustes = ahorcado.ajustes
         self.pantalla_rect = ahorcado.pantalla.get_rect()
 
-
         self._titulo()
         self._creadores()
         self._creador1()
         self._creador2()
         self._creador3()
-
 
     def _titulo(self):
         self.ancho, self.altura = 200, 50
@@ -57,7 +52,7 @@ class Menu:
         self.color_texto = (163, 0, 0)
         self.font = self.ajustes.font_score
 
-        texto = 'Kevin Chen Wu'
+        texto = 'Kevin Chen'
 
         self.creador1 = self.font.render(
             texto, True, self.color_texto, self.color_fondo
@@ -67,7 +62,6 @@ class Menu:
         # Moverlo hacia la arriba.
         self.creador1_rect.y -= self.creador1_rect.height * 5
         self.creador1_rect.x -= self.creador1_rect.height
-
 
     def _creador2(self):
         self.ancho, self.altura = 200, 50

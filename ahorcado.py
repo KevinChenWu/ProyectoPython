@@ -61,10 +61,9 @@ class Ahorcado:
 
         self.stats = Stats(self)
 
-        self.puntero_palabra = 0
-
         self.lista_palabras = []
         self._cargar_palabras()
+        self.puntero_palabra = 0
 
     def _init_juego(self):
         '''
@@ -220,9 +219,16 @@ class Ahorcado:
     def _revisar_score(self, event):
         if event.key == pygame.K_ESCAPE:
             self.score = False
+            self.lista_palabras = []
+            self._cargar_palabras()
+            self.puntero_palabra = 0
+            self._init_juego()
         elif event.key == pygame.K_SPACE:
             self.score = False
             self.juego_activo = True
+            self.lista_palabras = []
+            self._cargar_palabras()
+            self.puntero_palabra = 0
             self._init_juego()
 
     def _revisar_evento_tecla(self, event):
@@ -325,12 +331,12 @@ class Ahorcado:
         self.contador_fallos += 1
         letra_abecedario = self.ajustes.abecedario_completo.index(letra)
         self.letras_abecedario[letra_abecedario].fallo(letra)
+        print(self.contador_fallos)
         self.munneco.actualizar_munneco(self.contador_fallos)
-        if self.contador_fallos == 10:
+        if self.contador_fallos >= 10:
             # Por el momento se cierra el juego si se llega 10 fallos.
             # Hay que actualizarlo para que se regrese a un menu inicial
             # y muestre el scoreboard.
-            self.munneco.blitme()
             self._palabra_fallida()
 
     def _palabra_acertada(self):
