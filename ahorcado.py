@@ -82,21 +82,21 @@ class Ahorcado:
         '''
         palabras_largas = open('palabras-largas.txt', 'r')
         largas = palabras_largas.read().split('\n')
+        palabras_largas.close()
         largas = largas[:-1]
         self.largas = [i.upper() for i in largas]
-        palabras_largas.close()
 
         palabras_medianas = open('palabras-medianas.txt', 'r')
         medianas = palabras_medianas.read().split('\n')
+        palabras_medianas.close()
         medianas = medianas[:-1]
         self.medianas = [i.upper() for i in medianas]
-        palabras_medianas.close()
 
         palabras_cortas = open('palabras-cortas.txt', 'r')
         cortas = palabras_cortas.read().split('\n')
+        palabras_cortas.close()
         cortas = cortas[:-1]
         self.cortas = [i.upper() for i in cortas]
-        palabras_cortas.close()
 
         biblioteca_palabras = [self.cortas, self.medianas, self.largas]
         for nivel in biblioteca_palabras:

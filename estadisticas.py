@@ -44,6 +44,22 @@ class Stats:
         '''
         Se obtiene la puntuación final y se reinician los puntos a cero.
         '''
+        puntos_altos = open('highscore.txt', 'r+')
+        highscore = puntos_altos.read().split('\n')
+        highscore = highscore[:-1]
+        self.highscore = [int(numero) for numero in highscore]
+        for i in range(5):
+            if self.puntos > self.highscore[i]:
+                self.highscore.insert(i, self.puntos)
+                self.highscore.pop()
+                break
+        highscore = [str(num) for num in self.highscore]
+        highscore.append('')
+        highscore = '\n'.join(highscore)
+        puntos_altos.seek(0)
+        puntos_altos.write(highscore)
+        puntos_altos.truncate()
+        puntos_altos.close()
         print('Puntuación final:', self.puntos)
         self.puntos = 0
 

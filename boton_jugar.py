@@ -12,8 +12,8 @@ class BotonJugar:
         self.pantalla_rect = ahorcado.pantalla.get_rect()
 
         self.ancho, self.altura = 200, 50
-        self.color_boton = (255, 0, 0)
-        self.color_texto = (255, 255, 255)
+        self.color_boton = (255, 255, 255)
+        self.color_texto = (163, 73, 164)
         self.font = self.ajustes.font_menu
 
         self.rect = pygame.Rect(0, 0, self.ancho, self.altura)
