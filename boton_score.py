@@ -1,7 +1,7 @@
 import pygame
 
 
-class BotonJugar:
+class BotonScore:
 
     def __init__(self, ahorcado):
         '''
@@ -18,12 +18,11 @@ class BotonJugar:
 
         self.rect = pygame.Rect(0, 0, self.ancho, self.altura)
         self.rect.center = self.pantalla_rect.center
-        self.rect.y -= self.rect.height * 2
 
-        self._boton_jugar()
+        self._boton_score()
 
-    def _boton_jugar(self):
-        msg = 'Jugar'
+    def _boton_score(self):
+        msg = 'Tabla de puntuaciones'
         self.mensaje = self.font.render(
             msg, True, self.color_texto, self.color_boton
         )

@@ -20,6 +20,12 @@ from estadisticas import Stats
 
 from boton_jugar import BotonJugar
 
+from boton_salir import BotonSalir
+
+from boton_score import BotonScore
+
+from menu import Menu
+
 
 class Ahorcado:
     '''
@@ -42,6 +48,12 @@ class Ahorcado:
         pygame.display.set_caption('Ahorcado')
 
         self.boton_jugar = BotonJugar(self)
+
+        self.boton_salir = BotonSalir(self)
+
+        self.boton_score = BotonScore(self)
+
+        self.menu = Menu(self)
 
         self.juego_activo = False
 
@@ -160,8 +172,8 @@ class Ahorcado:
         Bucle principal del juego.
         '''
         while True:
-            self._verificar_eventos()
             self._actualizar_pantalla()
+            self._verificar_eventos()
 
     def _verificar_eventos(self):
         '''
@@ -177,6 +189,8 @@ class Ahorcado:
             ):
                 mouse_pos = pygame.mouse.get_pos()
                 self._revisar_boton_jugar(mouse_pos)
+                self._revisar_boton_salir(mouse_pos)
+                self._revisar_boton_score(mouse_pos)
             elif (
                 event.type == pygame.KEYDOWN and
                 self.juego_activo and
@@ -194,6 +208,14 @@ class Ahorcado:
         if self.boton_jugar.rect.collidepoint(mouse_pos):
             self.juego_activo = True
             self._init_juego()
+
+    def _revisar_boton_salir(self, mouse_pos):
+        if self.boton_salir.rect.collidepoint(mouse_pos):
+            sys.exit()
+
+    def _revisar_boton_score(self, mouse_pos):
+        if self.boton_score.rect.collidepoint(mouse_pos):
+            self.score = True
 
     def _revisar_score(self, event):
         if event.key == pygame.K_ESCAPE:
@@ -304,10 +326,11 @@ class Ahorcado:
         letra_abecedario = self.ajustes.abecedario_completo.index(letra)
         self.letras_abecedario[letra_abecedario].fallo(letra)
         self.munneco.actualizar_munneco(self.contador_fallos)
-        if self.contador_fallos >= 10:
+        if self.contador_fallos == 10:
             # Por el momento se cierra el juego si se llega 10 fallos.
             # Hay que actualizarlo para que se regrese a un menu inicial
             # y muestre el scoreboard.
+            self.munneco.blitme()
             self._palabra_fallida()
 
     def _palabra_acertada(self):
@@ -342,6 +365,9 @@ class Ahorcado:
         # Menú
         if self.juego_activo is False and self.score is False:
             self.boton_jugar._dibujar_boton()
+            self.boton_salir._dibujar_boton()
+            self.boton_score._dibujar_boton()
+            self.menu._dibujar_menu()
 
         # Dentro del juego
         if self.juego_activo is True and self.score is False:
