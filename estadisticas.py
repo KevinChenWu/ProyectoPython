@@ -77,7 +77,7 @@ class Stats:
         # Moverlo hacia la derecha.
         self.volver_menu_rect.x += self.volver_menu_rect.height
         # Comenzar de nuevo el juego.
-        SPACE = 'Presione Space para volver a jugar'
+        SPACE = 'Presione Space para jugar'
         self.volver_juego = self.font.render(
             SPACE, True, self.negro, self.fondo
         )
