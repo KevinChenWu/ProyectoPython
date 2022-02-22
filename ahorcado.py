@@ -28,6 +28,10 @@ from menu import Menu
 
 from tablero_puntos import TableroPuntos
 
+from nombre import Nombre
+
+from boton_nombre import BotonNombre
+
 
 class Ahorcado:
     '''
@@ -55,11 +59,19 @@ class Ahorcado:
 
         self.boton_score = BotonScore(self)
 
+        self.boton_nombre = BotonNombre(self)
+
         self.menu = Menu(self)
+
+        self.texto_usuario = ''
+
+        self.nombre = Nombre(self)
 
         self.juego_activo = False
 
         self.score = False
+
+        self.intro_nombre = False
 
         self.stats = Stats(self)
 
@@ -175,8 +187,8 @@ class Ahorcado:
         Bucle principal del juego.
         '''
         while True:
-            self._actualizar_pantalla()
             self._verificar_eventos()
+            self._actualizar_pantalla()
 
     def _verificar_eventos(self):
         '''
@@ -188,7 +200,8 @@ class Ahorcado:
             elif (
                 event.type == pygame.MOUSEBUTTONDOWN and
                 self.juego_activo is False and
-                self.score is False
+                self.score is False and
+                self.intro_nombre is False
             ):
                 mouse_pos = pygame.mouse.get_pos()
                 self._revisar_boton_jugar(mouse_pos)
@@ -206,6 +219,19 @@ class Ahorcado:
                 self.score
             ):
                 self._revisar_score(event)
+            elif (
+                event.type == pygame.KEYDOWN and
+                self.juego_activo is False and
+                self.intro_nombre
+            ):
+                self._revisar_nombre(event)
+            elif (
+                event.type == pygame.MOUSEBUTTONDOWN and
+                self.juego_activo is False and
+                self.intro_nombre
+            ):
+                mouse_pos = pygame.mouse.get_pos()
+                self._revisar_boton_nombre(mouse_pos)
 
     def _revisar_boton_jugar(self, mouse_pos):
         if self.boton_jugar.rect.collidepoint(mouse_pos):
@@ -234,6 +260,22 @@ class Ahorcado:
             self._cargar_palabras()
             self.puntero_palabra = 0
             self._init_juego()
+
+    def _revisar_nombre(self, event):
+        # Revisa borrar letra.
+        if event.key == pygame.K_BACKSPACE:
+            self.texto_usuario = self.texto_usuario[:-1]
+        elif len(self.texto_usuario) < 5:
+            self.texto_usuario += event.unicode
+        self.nombre._rect_nombre(self.texto_usuario)
+
+    def _revisar_boton_nombre(self, mouse_pos):
+        if self.boton_nombre.rect.collidepoint(mouse_pos):
+            # Pasar el nombre self.texto_usuario.
+            if len(self.texto_usuario) > 0:
+                self.score = True
+                self.intro_nombre = False
+                # Pasar el nombre self.texto_usuario.
 
     def _revisar_evento_tecla(self, event):
         '''
@@ -335,13 +377,7 @@ class Ahorcado:
         self.contador_fallos += 1
         letra_abecedario = self.ajustes.abecedario_completo.index(letra)
         self.letras_abecedario[letra_abecedario].fallo(letra)
-        print(self.contador_fallos)
         self.munneco.actualizar_munneco(self.contador_fallos)
-        if self.contador_fallos >= 10:
-            # Por el momento se cierra el juego si se llega 10 fallos.
-            # Hay que actualizarlo para que se regrese a un menu inicial
-            # y muestre el scoreboard.
-            self._palabra_fallida()
 
     def _palabra_acertada(self):
         print('Palabra acertada')
@@ -358,11 +394,13 @@ class Ahorcado:
             print('Se acabó el juego')
 
     def _palabra_fallida(self):
-        print('Palabra fallida')
-        print('Juego terminado.')
-        self.stats._puntuacion_final()
-        self.juego_activo = False
-        self.score = True
+        if self.contador_fallos >= 10:
+            print('Palabra fallida')
+            print('Juego terminado.')
+            self.stats._puntuacion_final()
+            self.juego_activo = False
+            self.intro_nombre = True
+            # self.score = True
 
     def _actualizar_pantalla(self):
         '''
@@ -373,16 +411,21 @@ class Ahorcado:
         self.pantalla.fill(self.ajustes.bg_color)
 
         # Menú
-        if self.juego_activo is False and self.score is False:
+        if (
+            self.juego_activo is False and
+            self.score is False and
+            self.intro_nombre is False
+        ):
             self.boton_jugar._dibujar_boton()
             self.boton_salir._dibujar_boton()
             self.boton_score._dibujar_boton()
             self.menu._dibujar_menu()
 
         # Dentro del juego
-        if self.juego_activo is True and self.score is False:
+        elif self.juego_activo is True and self.intro_nombre is False:
             # Impresión de muñeco.
             self.munneco.blitme()
+            self._palabra_fallida()
 
             # Impresión de los puntos.
             self.stats.blit_puntos()
@@ -395,10 +438,13 @@ class Ahorcado:
             for letra in self.letras_abecedario:
                 letra.blitme()
 
-        if self.juego_activo is False and self.score is True:
+        elif self.juego_activo is False and self.score is True:
             self.stats.blitme()
             self.tablero_puntos._mostrar_puntos()
 
+        elif self.juego_activo is False and self.intro_nombre is True:
+            self.nombre._dibujar_texto()
+            self.boton_nombre._dibujar_boton()
         # Hace visible la última pantalla dibujada.
         pygame.display.flip()
 

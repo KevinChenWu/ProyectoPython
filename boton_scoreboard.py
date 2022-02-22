@@ -1,7 +1,7 @@
 import pygame
 
 
-class BotonSalir:
+class ScoreBoard:
 
     def __init__(self, ahorcado):
         '''
@@ -12,18 +12,17 @@ class BotonSalir:
         self.pantalla_rect = ahorcado.pantalla.get_rect()
 
         self.ancho, self.altura = 200, 50
-        self.color_boton = (255, 255, 255)
-        self.color_texto = (163, 73, 164)
+        self.color_boton = (255, 0, 0)
+        self.color_texto = (255, 255, 255)
         self.font = self.ajustes.font_menu
 
         self.rect = pygame.Rect(0, 0, self.ancho, self.altura)
         self.rect.center = self.pantalla_rect.center
-        self.rect.y += self.rect.height * 2
 
-        self._boton_salir()
+        self._boton_scoreboard()
 
-    def _boton_salir(self):
-        msg = 'Salir'
+    def _boton_scoreboard(self):
+        msg = 'Tabla de Puntajes'
         self.mensaje = self.font.render(
             msg, True, self.color_texto, self.color_boton
         )

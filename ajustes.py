@@ -27,7 +27,8 @@ class Ajustes:
         self.font_palabra = pygame.font.Font(None, 50)
         self.font_menu = pygame.font.Font(None, 50)
         self.font_score = pygame.font.Font(None, 30)
-        self.font_titulo = pygame.font.Font(None, 70)
+        self.font_titulo = pygame.font.Font(None, 100)
+        self.font_nombre = pygame.font.Font(None, 60)
 
         # Abecedario.
         self.abecedario_completo = [

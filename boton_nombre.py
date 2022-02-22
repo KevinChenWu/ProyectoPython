@@ -1,7 +1,7 @@
 import pygame
 
 
-class BotonSalir:
+class BotonNombre:
 
     def __init__(self, ahorcado):
         '''
@@ -12,18 +12,18 @@ class BotonSalir:
         self.pantalla_rect = ahorcado.pantalla.get_rect()
 
         self.ancho, self.altura = 200, 50
-        self.color_boton = (255, 255, 255)
-        self.color_texto = (163, 73, 164)
+        self.color_boton = self.ajustes.rojo
+        self.color_texto = self.ajustes.blanco
         self.font = self.ajustes.font_menu
 
         self.rect = pygame.Rect(0, 0, self.ancho, self.altura)
         self.rect.center = self.pantalla_rect.center
         self.rect.y += self.rect.height * 2
 
-        self._boton_salir()
+        self._boton_nombre()
 
-    def _boton_salir(self):
-        msg = 'Salir'
+    def _boton_nombre(self):
+        msg = 'Continuar'
         self.mensaje = self.font.render(
             msg, True, self.color_texto, self.color_boton
         )
@@ -32,4 +32,5 @@ class BotonSalir:
 
     def _dibujar_boton(self):
         # Dibujar el botón
+        pygame.draw.rect(self.pantalla, self.color_boton, self.rect)
         self.pantalla.blit(self.mensaje, self.mensaje_rect)
