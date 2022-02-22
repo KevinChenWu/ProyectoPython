@@ -26,6 +26,8 @@ from boton_score import BotonScore
 
 from menu import Menu
 
+from tablero_puntos import TableroPuntos
+
 
 class Ahorcado:
     '''
@@ -60,6 +62,8 @@ class Ahorcado:
         self.score = False
 
         self.stats = Stats(self)
+
+        self.tablero_puntos = TableroPuntos(self)
 
         self.lista_palabras = []
         self._cargar_palabras()
@@ -393,6 +397,7 @@ class Ahorcado:
 
         if self.juego_activo is False and self.score is True:
             self.stats.blitme()
+            self.tablero_puntos._mostrar_puntos()
 
         # Hace visible la última pantalla dibujada.
         pygame.display.flip()
