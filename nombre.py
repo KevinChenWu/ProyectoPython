@@ -23,6 +23,7 @@ class Nombre:
 
         self._rect_nombre(texto)
         self._introducir()
+        self._ganaste()
         self._perdiste()
 
     def _rect_nombre(self, texto_usuario):
@@ -58,10 +59,24 @@ class Nombre:
         # Moverlo hacia la arriba.
         self.perdiste_rect.y -= self.perdiste_rect.height * 3
 
-    def _dibujar_texto(self):
+    def _ganaste(self):
+        texto = 'Ganaste'
+        font = self.ajustes.font_titulo
+        self.ganaste = font.render(
+            texto, True, self.ajustes.verde, self.ajustes.blanco
+        )
+        self.ganaste_rect = self.ganaste.get_rect()
+        self.ganaste_rect.center = self.pantalla_rect.center
+        # Moverlo hacia la arriba.
+        self.ganaste_rect.y -= self.ganaste_rect.height * 3
+
+    def _dibujar_texto(self, ganaste):
         # Dibujar Rectángulo
         pygame.draw.rect(self.pantalla, self.color_fondo, self.input_rect)
         # Dibujar el botón
         self.pantalla.blit(self.texto, self.texto_rect)
         self.pantalla.blit(self.intro, self.intro_rect)
-        self.pantalla.blit(self.perdiste, self.perdiste_rect)
+        if ganaste:
+            self.pantalla.blit(self.ganaste, self.ganaste_rect)
+        else:
+            self.pantalla.blit(self.perdiste, self.perdiste_rect)

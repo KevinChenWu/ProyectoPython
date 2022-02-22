@@ -4,14 +4,6 @@ class TableroPuntos:
         self.ajustes = ahorcado.ajustes
         self.pantalla_rect = ahorcado.pantalla.get_rect()
 
-        self._titulo()
-        self._puntos()
-        self._top1()
-        self._top2()
-        self._top3()
-        self._top4()
-        self._top5()
-
     def _titulo(self):
         self.ancho, self.altura = 200, 25
         self.color_fondo = (255, 255, 255)
@@ -47,6 +39,27 @@ class TableroPuntos:
         # Moverlo hacia la abajo.
         self.puntos_rect.x -= self.puntos_rect.width / 2
         self.puntos_rect.y += self.puntos_rect.height
+
+    def _nombres(self):
+        nombres_altos = open('highscore_nombre.txt', 'r')
+        nombre_highscore = nombres_altos.read().split('\n')
+        nombre_highscore = nombre_highscore[:-1]
+        nombres_altos.close()
+        self.highscore_nombre = nombre_highscore
+
+        self.ancho, self.altura = 100, 50
+        self.color_fondo = (255, 255, 255)
+        self.color_texto = (0, 0, 0)
+        self.font = self.ajustes.font_score
+        nombres = 'Nombres'
+        self.nombres = self.font.render(
+            nombres, True, self.color_texto, self.color_fondo
+        )
+        self.nombres_rect = self.nombres.get_rect()
+        self.nombres_rect.topleft = self.titulo_rect.bottomleft
+        # Moverlo hacia la abajo.
+        self.nombres_rect.x += self.nombres_rect.width / 2
+        self.nombres_rect.y += self.nombres_rect.height
 
     def _top1(self):
         self.ancho, self.altura = 100, 50
@@ -118,11 +131,100 @@ class TableroPuntos:
         # Moverlo hacia la abajo.
         self.top5_rect.y += self.top5_rect.height * 2
 
+    def _nombre1(self):
+        self.ancho, self.altura = 100, 50
+        self.color_fondo = (255, 255, 255)
+        self.color_texto = (0, 0, 0)
+        self.font = self.ajustes.font_score
+        nombre1 = self.highscore_nombre[0]
+        self.nombre1 = self.font.render(
+            nombre1, True, self.color_texto, self.color_fondo
+        )
+        self.nombre1_rect = self.nombre1.get_rect()
+        self.nombre1_rect.topleft = self.nombres_rect.topleft
+        # Moverlo hacia la abajo.
+        self.nombre1_rect.y += self.nombre1_rect.height * 2
+
+    def _nombre2(self):
+        self.ancho, self.altura = 100, 50
+        self.color_fondo = (255, 255, 255)
+        self.color_texto = (0, 0, 0)
+        self.font = self.ajustes.font_score
+        nombre2 = self.highscore_nombre[1]
+        self.nombre2 = self.font.render(
+            nombre2, True, self.color_texto, self.color_fondo
+        )
+        self.nombre2_rect = self.nombre2.get_rect()
+        self.nombre2_rect.topright = self.nombre1_rect.topright
+        # Moverlo hacia la abajo.
+        self.nombre2_rect.y += self.nombre2_rect.height * 2
+
+    def _nombre3(self):
+        self.ancho, self.altura = 100, 50
+        self.color_fondo = (255, 255, 255)
+        self.color_texto = (0, 0, 0)
+        self.font = self.ajustes.font_score
+        nombre3 = self.highscore_nombre[2]
+        self.nombre3 = self.font.render(
+            nombre3, True, self.color_texto, self.color_fondo
+        )
+        self.nombre3_rect = self.nombre3.get_rect()
+        self.nombre3_rect.topright = self.nombre2_rect.topright
+        # Moverlo hacia la abajo.
+        self.nombre3_rect.y += self.nombre3_rect.height * 2
+
+    def _nombre4(self):
+        self.ancho, self.altura = 100, 50
+        self.color_fondo = (255, 255, 255)
+        self.color_texto = (0, 0, 0)
+        self.font = self.ajustes.font_score
+        nombre4 = self.highscore_nombre[3]
+        self.nombre4 = self.font.render(
+            nombre4, True, self.color_texto, self.color_fondo
+        )
+        self.nombre4_rect = self.nombre4.get_rect()
+        self.nombre4_rect.topright = self.nombre3_rect.topright
+        # Moverlo hacia la abajo.
+        self.nombre4_rect.y += self.nombre4_rect.height * 2
+
+    def _nombre5(self):
+        self.ancho, self.altura = 100, 50
+        self.color_fondo = (255, 255, 255)
+        self.color_texto = (0, 0, 0)
+        self.font = self.ajustes.font_score
+        nombre5 = self.highscore_nombre[4]
+        self.nombre5 = self.font.render(
+            nombre5, True, self.color_texto, self.color_fondo
+        )
+        self.nombre5_rect = self.nombre5.get_rect()
+        self.nombre5_rect.topright = self.nombre4_rect.topright
+        # Moverlo hacia la abajo.
+        self.nombre5_rect.y += self.nombre5_rect.height * 2
+
     def _mostrar_puntos(self):
+        self._titulo()
+        self._puntos()
+        self._nombres()
+        self._top1()
+        self._nombre1()
+        self._top2()
+        self._nombre2()
+        self._top3()
+        self._nombre3()
+        self._top4()
+        self._nombre4()
+        self._top5()
+        self._nombre5()
         self.pantalla.blit(self.titulo, self.titulo_rect)
         self.pantalla.blit(self.puntos, self.puntos_rect)
+        self.pantalla.blit(self.nombres, self.nombres_rect)
         self.pantalla.blit(self.top1, self.top1_rect)
+        self.pantalla.blit(self.nombre1, self.nombre1_rect)
         self.pantalla.blit(self.top2, self.top2_rect)
+        self.pantalla.blit(self.nombre2, self.nombre2_rect)
         self.pantalla.blit(self.top3, self.top3_rect)
+        self.pantalla.blit(self.nombre3, self.nombre3_rect)
         self.pantalla.blit(self.top4, self.top4_rect)
+        self.pantalla.blit(self.nombre4, self.nombre4_rect)
         self.pantalla.blit(self.top5, self.top5_rect)
+        self.pantalla.blit(self.nombre5, self.nombre5_rect)

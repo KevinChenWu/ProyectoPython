@@ -64,6 +64,7 @@ class Ahorcado:
         self.menu = Menu(self)
 
         self.texto_usuario = ''
+        self.ganaste = False
 
         self.nombre = Nombre(self)
 
@@ -275,6 +276,8 @@ class Ahorcado:
             if len(self.texto_usuario) > 0:
                 self.score = True
                 self.intro_nombre = False
+                self.ganaste = False
+                self.stats._puntuacion_final(self.texto_usuario)
                 # Pasar el nombre self.texto_usuario.
 
     def _revisar_evento_tecla(self, event):
@@ -378,6 +381,7 @@ class Ahorcado:
         letra_abecedario = self.ajustes.abecedario_completo.index(letra)
         self.letras_abecedario[letra_abecedario].fallo(letra)
         self.munneco.actualizar_munneco(self.contador_fallos)
+        self._palabra_fallida()
 
     def _palabra_acertada(self):
         print('Palabra acertada')
@@ -387,17 +391,20 @@ class Ahorcado:
             self.stats._aumentar_puntuacion('medianas')
         elif self.palabra in self.largas:
             self.stats._aumentar_puntuacion('largas')
-        if self.puntero_palabra < 15:
+        if self.puntero_palabra < 14:
             self.puntero_palabra += 1
             self._init_juego()
         else:
-            print('Se acabó el juego')
+            self.stats._puntuacion_final(self.texto_usuario)
+            self.ganaste = True
+            self.juego_activo = False
+            self.intro_nombre = True
 
     def _palabra_fallida(self):
         if self.contador_fallos >= 10:
             print('Palabra fallida')
             print('Juego terminado.')
-            self.stats._puntuacion_final()
+            self.ganaste = False
             self.juego_activo = False
             self.intro_nombre = True
             # self.score = True
@@ -425,7 +432,6 @@ class Ahorcado:
         elif self.juego_activo is True and self.intro_nombre is False:
             # Impresión de muñeco.
             self.munneco.blitme()
-            self._palabra_fallida()
 
             # Impresión de los puntos.
             self.stats.blit_puntos()
@@ -438,13 +444,14 @@ class Ahorcado:
             for letra in self.letras_abecedario:
                 letra.blitme()
 
+        elif self.juego_activo is False and self.intro_nombre is True:
+            self.nombre._dibujar_texto(self.ganaste)
+            self.boton_nombre._dibujar_boton()
+
         elif self.juego_activo is False and self.score is True:
             self.stats.blitme()
             self.tablero_puntos._mostrar_puntos()
 
-        elif self.juego_activo is False and self.intro_nombre is True:
-            self.nombre._dibujar_texto()
-            self.boton_nombre._dibujar_boton()
         # Hace visible la última pantalla dibujada.
         pygame.display.flip()
 

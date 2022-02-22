@@ -40,26 +40,45 @@ class Stats:
             self.puntos += 100
         self._actualizar_puntos()
 
-    def _puntuacion_final(self):
+    def _puntuacion_final(self, nombre):
         '''
         Se obtiene la puntuación final y se reinician los puntos a cero.
         '''
-        puntos_altos = open('highscore.txt', 'r+')
+        puntos_altos = open('highscore.txt', 'r')
         highscore = puntos_altos.read().split('\n')
         highscore = highscore[:-1]
+        puntos_altos.close()
+
+        nombres_altos = open('highscore_nombre.txt', 'r')
+        nombre_highscore = nombres_altos.read().split('\n')
+        nombre_highscore = nombre_highscore[:-1]
+        nombres_altos.close()
+
         self.highscore = [int(numero) for numero in highscore]
+        self.highscore_nombre = nombre_highscore
         for i in range(5):
             if self.puntos > self.highscore[i]:
                 self.highscore.insert(i, self.puntos)
                 self.highscore.pop()
+                self.highscore_nombre.insert(i, nombre)
+                self.highscore_nombre.pop()
                 break
         highscore = [str(num) for num in self.highscore]
         highscore.append('')
         highscore = '\n'.join(highscore)
-        puntos_altos.seek(0)
+
+        nombre_highscore = self.highscore_nombre
+        nombre_highscore.append('')
+        nombre_highscore = '\n'.join(nombre_highscore)
+
+        puntos_altos = open('highscore.txt', 'w')
         puntos_altos.write(highscore)
-        puntos_altos.truncate()
         puntos_altos.close()
+
+        nombres_altos = open('highscore_nombre.txt', 'w')
+        nombres_altos.write(nombre_highscore)
+        nombres_altos.close()
+
         print('Puntuación final:', self.puntos)
         self.puntos = 0
 
