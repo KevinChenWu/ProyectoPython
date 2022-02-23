@@ -14,7 +14,7 @@ class Stats:
         self.negro = self.ajustes.negro
         self.fondo = self.ajustes.fondo
 
-        # Puntos actuales.
+        # Puntos actuales y su impresión en pantalla.
         self.puntos = 0
         PUNTOS = 'Puntos: {}'.format(self.puntos)
         self.puntaje = self.font.render(
@@ -30,30 +30,29 @@ class Stats:
         Se aumenta la puntuación de acuerdo al tamaño de la palabra.
         '''
         if tamanno == 'cortas':
-            print('Dificultad: fácil')
             self.puntos += 25
         elif tamanno == 'medianas':
-            print('Dificultad: media')
             self.puntos += 50
         elif tamanno == 'largas':
-            print('Dificultad: difícil')
             self.puntos += 100
         self._actualizar_puntos()
 
     def _puntuacion_final(self, nombre):
         '''
-        Se obtiene la puntuación final y se reinician los puntos a cero.
+        Se obtiene la puntuación final y el nombre, se compara contra los
+        puntos altos registrados, se agrega si es mayor a alguno de esa lista
+        y se reinician los puntos a cero.
         '''
+        # Toma información de los archivos de puntos altos.
         puntos_altos = open('highscore.txt', 'r')
         highscore = puntos_altos.read().split('\n')
         highscore = highscore[:-1]
         puntos_altos.close()
-
         nombres_altos = open('highscore_nombre.txt', 'r')
         nombre_highscore = nombres_altos.read().split('\n')
         nombre_highscore = nombre_highscore[:-1]
         nombres_altos.close()
-
+        # Compara la puntuación final del usuario contra los registrados
         self.highscore = [int(numero) for numero in highscore]
         self.highscore_nombre = nombre_highscore
         for i in range(5):
@@ -63,23 +62,20 @@ class Stats:
                 self.highscore_nombre.insert(i, nombre)
                 self.highscore_nombre.pop()
                 break
+        # Sobreescribe los datos viejos de puntos altos.
         highscore = [str(num) for num in self.highscore]
         highscore.append('')
         highscore = '\n'.join(highscore)
-
         nombre_highscore = self.highscore_nombre
         nombre_highscore.append('')
         nombre_highscore = '\n'.join(nombre_highscore)
-
         puntos_altos = open('highscore.txt', 'w')
         puntos_altos.write(highscore)
         puntos_altos.close()
-
         nombres_altos = open('highscore_nombre.txt', 'w')
         nombres_altos.write(nombre_highscore)
         nombres_altos.close()
-
-        print('Puntuación final:', self.puntos)
+        # Reinicia los puntos
         self.puntos = 0
 
     def _scoreboard(self):
@@ -102,7 +98,7 @@ class Stats:
         )
         self.volver_juego_rect = self.volver_juego.get_rect()
         self.volver_juego_rect.bottomright = self.pantalla_rect.bottomright
-        # Moverlo hacia la derecha.
+        # Moverlo hacia la izquierda.
         self.volver_juego_rect.x -= self.volver_juego_rect.height
 
     def blitme(self):

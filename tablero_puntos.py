@@ -1,10 +1,21 @@
 class TableroPuntos:
+    '''
+    Hace la impresión de los puntos altos.
+    '''
+
     def __init__(self, ahorcado):
+        '''
+        Se inicializan la pantalla del tablero.
+        '''
         self.pantalla = ahorcado.pantalla
         self.ajustes = ahorcado.ajustes
         self.pantalla_rect = ahorcado.pantalla.get_rect()
 
     def _titulo(self):
+        '''
+        Ajustes para imprimir el título de tablero.
+        '''
+        # Ajustes del título del Tablero a imprimir.
         self.ancho, self.altura = 200, 25
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 255)
@@ -20,12 +31,17 @@ class TableroPuntos:
         self.titulo_rect.y += self.titulo_rect.height * 2
 
     def _puntos(self):
+        '''
+        Ajustes para imprimir el subtítulo de puntos.
+        '''
+
+        # Lectura de los puntos altos
         puntos_altos = open('highscore.txt', 'r')
         highscore = puntos_altos.read().split('\n')
         highscore = highscore[:-1]
         puntos_altos.close()
         self.highscore = highscore
-
+        # Ajustes del subtítulo de Puntos a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -36,17 +52,22 @@ class TableroPuntos:
         )
         self.puntos_rect = self.puntos.get_rect()
         self.puntos_rect.topright = self.titulo_rect.bottomright
-        # Moverlo hacia la abajo.
+        # Moverlo hacia abajo.
         self.puntos_rect.x -= self.puntos_rect.width / 2
         self.puntos_rect.y += self.puntos_rect.height
 
     def _nombres(self):
+        '''
+        Ajustes para imprimir el subtítulo de nombres.
+        '''
+
+        # Lectura de los nombres asociados a los puntos altos
         nombres_altos = open('highscore_nombre.txt', 'r')
         nombre_highscore = nombres_altos.read().split('\n')
         nombre_highscore = nombre_highscore[:-1]
         nombres_altos.close()
         self.highscore_nombre = nombre_highscore
-
+        # Ajustes del subtítulo de Nombres a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -57,11 +78,16 @@ class TableroPuntos:
         )
         self.nombres_rect = self.nombres.get_rect()
         self.nombres_rect.topleft = self.titulo_rect.bottomleft
-        # Moverlo hacia la abajo.
+        # Moverlo hacia abajo.
         self.nombres_rect.x += self.nombres_rect.width / 2
         self.nombres_rect.y += self.nombres_rect.height
 
     def _top1(self):
+        '''
+        Ajustes para imprimir los puntos del primer puesto.
+        '''
+
+        # Ajustes de los puntos de top 1 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -76,6 +102,11 @@ class TableroPuntos:
         self.top1_rect.y += self.top1_rect.height * 2
 
     def _top2(self):
+        '''
+        Ajustes para imprimir los puntos del segundo puesto.
+        '''
+
+        # Ajustes de los puntos de top 2 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -90,6 +121,11 @@ class TableroPuntos:
         self.top2_rect.y += self.top2_rect.height * 2
 
     def _top3(self):
+        '''
+        Ajustes para imprimir los puntos del tercer puesto.
+        '''
+
+        # Ajustes de los puntos de top 3 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -104,6 +140,11 @@ class TableroPuntos:
         self.top3_rect.y += self.top3_rect.height * 2
 
     def _top4(self):
+        '''
+        Ajustes para imprimir los puntos del cuarto puesto.
+        '''
+
+        # Ajustes de los puntos de top 4 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -118,6 +159,11 @@ class TableroPuntos:
         self.top4_rect.y += self.top4_rect.height * 2
 
     def _top5(self):
+        '''
+        Ajustes para imprimir los puntos del quinto puesto.
+        '''
+
+        # Ajustes de los puntos de top 5 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -132,6 +178,11 @@ class TableroPuntos:
         self.top5_rect.y += self.top5_rect.height * 2
 
     def _nombre1(self):
+        '''
+        Ajustes para imprimir el nombre del primer puesto.
+        '''
+
+        # Ajustes del nombre de top 1 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -146,6 +197,11 @@ class TableroPuntos:
         self.nombre1_rect.y += self.nombre1_rect.height * 2
 
     def _nombre2(self):
+        '''
+        Ajustes para imprimir el nombre del segundo puesto.
+        '''
+
+        # Ajustes del nombre de top 2 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -160,6 +216,11 @@ class TableroPuntos:
         self.nombre2_rect.y += self.nombre2_rect.height * 2
 
     def _nombre3(self):
+        '''
+        Ajustes para imprimir el nombre del tercer puesto.
+        '''
+
+        # Ajustes del nombre de top 3 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -174,6 +235,11 @@ class TableroPuntos:
         self.nombre3_rect.y += self.nombre3_rect.height * 2
 
     def _nombre4(self):
+        '''
+        Ajustes para imprimir el nombre del cuarto puesto.
+        '''
+
+        # Ajustes del nombre de top 4 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -188,6 +254,11 @@ class TableroPuntos:
         self.nombre4_rect.y += self.nombre4_rect.height * 2
 
     def _nombre5(self):
+        '''
+        Ajustes para imprimir el nombre del quinto puesto.
+        '''
+
+        # Ajustes del nombre de top 5 a imprimir
         self.ancho, self.altura = 100, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (0, 0, 0)
@@ -202,6 +273,10 @@ class TableroPuntos:
         self.nombre5_rect.y += self.nombre5_rect.height * 2
 
     def _mostrar_puntos(self):
+        '''
+        Dibujar el título, los subtítulos, los puntos y los nombres del tablero
+        en pantalla.
+        '''
         self._titulo()
         self._puntos()
         self._nombres()
