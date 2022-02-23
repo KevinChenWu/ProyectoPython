@@ -5,7 +5,8 @@ class Nombre:
 
     def __init__(self, ahorcado):
         '''
-        Se inicializa los ajustes para desplegar la imagen del muñeco.
+        Se inicializa los ajustes para que el jugador puede introducir su
+        nombre.
         '''
         self.pantalla = ahorcado.pantalla
         self.ajustes = ahorcado.ajustes
@@ -27,6 +28,9 @@ class Nombre:
         self._perdiste()
 
     def _rect_nombre(self, texto_usuario):
+        '''
+        Rectángulo donde se introduce el nombre.
+        '''
         font = self.ajustes.font_nombre
         self.texto = font.render(
             texto_usuario, True, self.color_texto, self.color_fondo
@@ -38,6 +42,9 @@ class Nombre:
         self.input_rect.center = self.rect.center
 
     def _introducir(self):
+        '''
+        Jugador ingresa el nombre.
+        '''
         texto = 'Introduzca su nombre:'
         font = self.ajustes.font_nombre
         self.intro = font.render(
@@ -49,6 +56,9 @@ class Nombre:
         self.intro_rect.y -= self.intro_rect.height * 1.5
 
     def _perdiste(self):
+        '''
+        Si el jugador pierde en el juego.
+        '''
         texto = 'Perdiste'
         font = self.ajustes.font_titulo
         self.perdiste = font.render(
@@ -60,6 +70,9 @@ class Nombre:
         self.perdiste_rect.y -= self.perdiste_rect.height * 3
 
     def _ganaste(self):
+        '''
+        Si el jugador logra pasar el juego entero.
+        '''
         texto = 'Ganaste'
         font = self.ajustes.font_titulo
         self.ganaste = font.render(
@@ -71,6 +84,10 @@ class Nombre:
         self.ganaste_rect.y -= self.ganaste_rect.height * 3
 
     def _dibujar_texto(self, ganaste):
+        '''
+        Se dibuja el texto de ganar o perder.
+        Se dibuja el rectángulo donde el jugador introduce el nombre.
+        '''
         # Dibujar Rectángulo
         pygame.draw.rect(self.pantalla, self.color_fondo, self.input_rect)
         # Dibujar el botón

@@ -63,7 +63,9 @@ class Ahorcado:
 
         self.menu = Menu(self)
 
+        # Nombre que intruce el jugador.
         self.texto_usuario = ''
+
         self.ganaste = False
 
         self.nombre = Nombre(self)
@@ -79,7 +81,9 @@ class Ahorcado:
         self.tablero_puntos = TableroPuntos(self)
 
         self.lista_palabras = []
+
         self._cargar_palabras()
+
         self.puntero_palabra = 0
 
     def _init_juego(self):
@@ -135,9 +139,7 @@ class Ahorcado:
         '''
         Se escoge una de las palabras de manera aleatoria.
         '''
-        print(self.lista_palabras)
         palabra = self.lista_palabras[self.puntero_palabra]
-        print(palabra)
         return palabra
 
     def _crear_palabra(self):
@@ -235,19 +237,34 @@ class Ahorcado:
                 self._revisar_boton_nombre(mouse_pos)
 
     def _revisar_boton_jugar(self, mouse_pos):
+        '''
+        Botón que inicializa el juego desde el menú.
+        '''
         if self.boton_jugar.rect.collidepoint(mouse_pos):
             self.juego_activo = True
             self._init_juego()
 
     def _revisar_boton_salir(self, mouse_pos):
+        '''
+        Botón que cierra el juego desde el menú.
+        '''
         if self.boton_salir.rect.collidepoint(mouse_pos):
             sys.exit()
 
     def _revisar_boton_score(self, mouse_pos):
+        '''
+        Botón para mostrar tabla de puntuaciones históricas desde el menú.
+        '''
         if self.boton_score.rect.collidepoint(mouse_pos):
             self.score = True
 
     def _revisar_score(self, event):
+        '''
+        Teclas para regresar al menú o volver a jugar desde la tablas de
+        puntuaciones.
+        Escape: regresar al menú.
+        Space: volver a jugar.
+        '''
         if event.key == pygame.K_ESCAPE:
             self.score = False
             self.lista_palabras = []
@@ -263,7 +280,11 @@ class Ahorcado:
             self._init_juego()
 
     def _revisar_nombre(self, event):
-        # Revisa borrar letra.
+        '''
+        Teclas para que el usuario pueda ingresar su nombre.
+        Backspace: borra letra.
+        El máximo de letras para un nombre es de 5.
+        '''
         if event.key == pygame.K_BACKSPACE:
             self.texto_usuario = self.texto_usuario[:-1]
         elif len(self.texto_usuario) < 5:
@@ -271,14 +292,16 @@ class Ahorcado:
         self.nombre._rect_nombre(self.texto_usuario)
 
     def _revisar_boton_nombre(self, mouse_pos):
+        '''
+        Botón que permite al jugador introducir el nombre.
+        No se permiten nombres vacíos.
+        '''
         if self.boton_nombre.rect.collidepoint(mouse_pos):
-            # Pasar el nombre self.texto_usuario.
             if len(self.texto_usuario) > 0:
                 self.score = True
                 self.intro_nombre = False
                 self.ganaste = False
                 self.stats._puntuacion_final(self.texto_usuario)
-                # Pasar el nombre self.texto_usuario.
 
     def _revisar_evento_tecla(self, event):
         '''
@@ -313,7 +336,7 @@ class Ahorcado:
             self._evento_repetido('M')
         elif event.key == pygame.K_n:
             self._evento_repetido('N')
-        elif event.key == 59:  # Probar en teclado en español.
+        elif event.key == 59:
             self._evento_repetido('Ñ')
         elif event.key == pygame.K_o:
             self._evento_repetido('O')
@@ -384,7 +407,10 @@ class Ahorcado:
         self._palabra_fallida()
 
     def _palabra_acertada(self):
-        print('Palabra acertada')
+        '''
+        Si se acerta la palabra, se utiliza la dificultad para agregar los
+        puntos correspondientes y se cambia de palabra.
+        '''
         if self.palabra in self.cortas:
             self.stats._aumentar_puntuacion('cortas')
         elif self.palabra in self.medianas:
@@ -401,13 +427,13 @@ class Ahorcado:
             self.intro_nombre = True
 
     def _palabra_fallida(self):
+        '''
+        Si se falla la palabra, se pasa a la pantalla de introducir el nombre.
+        '''
         if self.contador_fallos >= 10:
-            print('Palabra fallida')
-            print('Juego terminado.')
             self.ganaste = False
             self.juego_activo = False
             self.intro_nombre = True
-            # self.score = True
 
     def _actualizar_pantalla(self):
         '''
@@ -444,10 +470,12 @@ class Ahorcado:
             for letra in self.letras_abecedario:
                 letra.blitme()
 
+        # Dentro de las tablas de puntuaciones.
         elif self.juego_activo is False and self.intro_nombre is True:
             self.nombre._dibujar_texto(self.ganaste)
             self.boton_nombre._dibujar_boton()
 
+        # Dentro de la pantalla para introducir el nombre.
         elif self.juego_activo is False and self.score is True:
             self.stats.blitme()
             self.tablero_puntos._mostrar_puntos()
