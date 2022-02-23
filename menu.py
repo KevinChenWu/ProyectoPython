@@ -15,6 +15,10 @@ class Menu:
         self._creador3()
 
     def _titulo(self):
+        '''
+        Se definen los parametros del titulo, como ancho,
+        color de fondo, color de texto etc
+        '''
         self.ancho, self.altura = 200, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (163, 0, 0)
@@ -30,6 +34,12 @@ class Menu:
         self.titulo_rect.y += self.titulo_rect.height
 
     def _creadores(self):
+        '''
+        Se definen los parametros como ancho,
+        color de fondo, color del texto de los creadores,
+        se modica la posicion en los ejes X, Y
+        '''
+
         self.ancho, self.altura = 200, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (163, 0, 0)
@@ -47,6 +57,12 @@ class Menu:
         self.creadores_rect.x -= self.creadores_rect.height
 
     def _creador1(self):
+        '''
+        Se definen los parametros como ancho,
+        color de fondo, color del texto para el creador 1
+        Kevin Chen Wu, tambien se  modifican las posiciones
+        en los ejes X y Y
+        '''
         self.ancho, self.altura = 200, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (163, 0, 0)
@@ -64,6 +80,12 @@ class Menu:
         self.creador1_rect.x -= self.creador1_rect.height
 
     def _creador2(self):
+        '''
+        Se definen los parametros como ancho,
+        color de fondo, color del texto para el creador 2
+        Javier Saca, tambien se  modifican las posiciones
+        en los ejes X y Y
+        '''
         self.ancho, self.altura = 200, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (163, 0, 0)
@@ -81,6 +103,13 @@ class Menu:
         self.creador2_rect.x -= self.creador2_rect.height
 
     def _creador3(self):
+
+        '''
+        Se definen los parametros como ancho,
+        color de fondo, color del texto para el creador 3
+        Jorge Sancho, tambien se  modifican las posiciones
+        en los ejes X y Y
+        '''
         self.ancho, self.altura = 200, 50
         self.color_fondo = (255, 255, 255)
         self.color_texto = (163, 0, 0)
@@ -98,6 +127,12 @@ class Menu:
         self.creador3_rect.x -= self.creador3_rect.height
 
     def _dibujar_menu(self):
+
+        '''
+        Se vuelca la imagen en la pantalla, por lo cual
+        mostrara en pantalla titulo, creadores y el nombre
+        de los 3 creadores
+        '''
         # Dibujar el botón
         self.pantalla.blit(self.titulo, self.titulo_rect)
         self.pantalla.blit(self.creadores, self.creadores_rect)
