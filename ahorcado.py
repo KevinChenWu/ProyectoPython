@@ -270,7 +270,6 @@ class Ahorcado:
             self.lista_palabras = []
             self._cargar_palabras()
             self.puntero_palabra = 0
-            self._init_juego()
         elif event.key == pygame.K_SPACE:
             self.score = False
             self.juego_activo = True
